@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Todo App{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900">{{ title }}</h3>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data" class="p-6 space-y-6">
+            {% csrf_token %}
+            
+            <div>
+                <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Title <span class="text-red-500">*</span>
+                </label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.title.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Associated Name <span class="text-red-500">*</span>
+                </label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.name.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Description
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.description.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="{{ form.image.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Image
+                </label>
+                {% if todo and todo.image %}
+                <div class="mb-3">
+                    <img src="{{ todo.image.url }}" alt="{{ todo.title }}" class="h-32 w-32 object-cover rounded-lg">
+                    <p class="text-sm text-gray-500 mt-1">Current image</p>
+                </div>
+                {% endif %}
+                {{ form.image }}
+                {% if form.image.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.image.errors.0 }}</p>
+                {% endif %}
+                <p class="mt-1 text-sm text-gray-500">Upload an image to associate with this todo (optional).</p>
+            </div>
+            
+            <div class="flex items-center">
+                {{ form.completed }}
+                <label for="{{ form.completed.id_for_label }}" class="ml-2 text-sm font-medium text-gray-700">
+                    Mark as completed
+                </label>
+                {% if form.completed.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.completed.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200">
+                <a href="{% if todo %}{% url 'todo:todo_detail' todo.pk %}{% else %}{% url 'todo:todo_list' %}{% endif %}" 
+                   class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Cancel
+                </a>
+                <button type="submit" 
+                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    {% if todo %}
+                        <i class="fas fa-save mr-1"></i>Update Todo
+                    {% else %}
+                        <i class="fas fa-plus mr-1"></i>Create Todo
+                    {% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

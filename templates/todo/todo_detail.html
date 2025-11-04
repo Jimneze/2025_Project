@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ todo.title }} - Todo App{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <!-- Header -->
+        <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-semibold text-gray-900">{{ todo.title }}</h1>
+                <p class="text-sm text-gray-600 mt-1">
+                    <i class="fas fa-user mr-1"></i>{{ todo.name }}
+                </p>
+            </div>
+            <div class="flex items-center space-x-3">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                    {% if todo.completed %}bg-green-100 text-green-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                    {% if todo.completed %}
+                        <i class="fas fa-check mr-1"></i>Completed
+                    {% else %}
+                        <i class="fas fa-clock mr-1"></i>Pending
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Image Section -->
+                {% if todo.image %}
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Image</h3>
+                    <div class="rounded-lg overflow-hidden shadow-sm">
+                        <img src="{{ todo.image.url }}" alt="{{ todo.title }}" class="w-full h-64 object-cover">
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Details Section -->
+                <div class="{% if not todo.image %}lg:col-span-2{% endif %}">
+                    {% if todo.description %}
+                    <div class="mb-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-3">Description</h3>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <p class="text-gray-700 whitespace-pre-wrap">{{ todo.description }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Metadata -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-lg font-medium text-gray-900 mb-3">Details</h3>
+                        <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Status</dt>
+                                <dd class="text-sm text-gray-900">
+                                    {% if todo.completed %}
+                                        <span class="text-green-600"><i class="fas fa-check mr-1"></i>Completed</span>
+                                    {% else %}
+                                        <span class="text-yellow-600"><i class="fas fa-clock mr-1"></i>Pending</span>
+                                    {% endif %}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Associated Name</dt>
+                                <dd class="text-sm text-gray-900">{{ todo.name }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Created</dt>
+                                <dd class="text-sm text-gray-900">{{ todo.created_at|date:"F d, Y \a\t g:i A" }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Last Updated</dt>
+                                <dd class="text-sm text-gray-900">{{ todo.updated_at|date:"F d, Y \a\t g:i A" }}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+            <div class="flex justify-between items-center">
+                <a href="{% url 'todo:todo_list' %}" 
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 bg-white rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to List
+                </a>
+                
+                <div class="flex space-x-3">
+                    <a href="{% url 'todo:toggle_todo_status' todo.pk %}" 
+                       class="inline-flex items-center px-4 py-2 {% if todo.completed %}bg-yellow-600 hover:bg-yellow-700{% else %}bg-green-600 hover:bg-green-700{% endif %} text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 {% if todo.completed %}focus:ring-yellow-500{% else %}focus:ring-green-500{% endif %}">
+                        {% if todo.completed %}
+                            <i class="fas fa-undo mr-2"></i>Mark as Pending
+                        {% else %}
+                            <i class="fas fa-check mr-2"></i>Mark as Completed
+                        {% endif %}
+                    </a>
+                    
+                    <a href="{% url 'todo:todo_update' todo.pk %}" 
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        <i class="fas fa-edit mr-2"></i>Edit
+                    </a>
+                    
+                    <a href="{% url 'todo:todo_delete' todo.pk %}" 
+                       class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        <i class="fas fa-trash mr-2"></i>Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
