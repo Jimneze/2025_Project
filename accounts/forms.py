@@ -34,3 +34,20 @@ class CustomAuthenticationForm(AuthenticationForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
             field.widget.attrs['placeholder'] = field.label
+
+
+class TOTPVerificationForm(forms.Form):
+    """Form for verifying TOTP tokens during login"""
+    token = forms.CharField(
+        max_length=6,
+        min_length=6,
+        required=True,
+        label='Verification Code',
+        widget=forms.TextInput(attrs={
+            'class': 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+            'placeholder': 'Enter 6-digit code',
+            'autocomplete': 'off',
+            'inputmode': 'numeric',
+            'pattern': '[0-9]{6}'
+        })
+    )

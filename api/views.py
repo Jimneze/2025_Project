@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions
-from .models import Todo
+from todo.models import Todo
 from .serializers import TodoSerializer
 import sqlite3
 from django.http import JsonResponse
