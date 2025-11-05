@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
@@ -63,7 +64,7 @@ def register_view(request):
     
     return render(request, 'accounts/register.html', {'form': form})
 
-
+@csrf_exempt
 def verify_2fa_view(request):
     """View to verify 2FA token during login"""
     # Check if user is in pre-2FA state
@@ -73,6 +74,7 @@ def verify_2fa_view(request):
         return redirect('accounts:login')
     
     from django.contrib.auth.models import User
+
     user = User.objects.get(id=user_id)
     
     if request.method == 'POST':
@@ -100,7 +102,6 @@ def verify_2fa_view(request):
         form = TOTPVerificationForm()
     
     return render(request, 'accounts/verify_2fa.html', {'form': form})
-
 
 @login_required
 def setup_2fa_view(request):
