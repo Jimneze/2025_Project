@@ -1,5 +1,12 @@
 from django.urls import path
 
+from api.views import TodoListCreateView, TodoRetrieveUpdateDestroyView
+
 urlpatterns = [
-    path('example/', lambda request: None),
+    # serving todo API endpoints through django models
+    path('todos/', TodoListCreateView.as_view(), name='todo-list-create'),
+    path('todos/<int:pk>/', TodoRetrieveUpdateDestroyView.as_view(), name='todo-retrieve-update-destroy'),
+    
+    # serving api with capability of sql injection
+    path('todos/sql-injection/', sql_injection_view),
 ]
