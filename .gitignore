@@ -16,3 +16,6 @@ core/media/
 media/*
 
 *.pem
+
+# remove my notes
+aws_deploy_setup.md
