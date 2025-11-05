@@ -1,6 +1,6 @@
 from django.urls import path
 
-from api.views import TodoListCreateView, TodoRetrieveUpdateDestroyView
+from api.views import *
 
 urlpatterns = [
     # serving todo API endpoints through django models
