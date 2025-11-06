@@ -1,0 +1,38 @@
+name: Deploy Django App to AWS Fargate
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.EC2_ACCESS_ID }}
+          aws-secret-access-key: ${{ secrets.EC2_SECRET_KEY }}
+          aws-region: eu-north-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push image to ECR
+        run: |
+          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/todo-app:latest
+          docker build -t $IMAGE_URI .
+          docker push $IMAGE_URI
+
+      # - name: Update ECS service
+      #   uses: aws-actions/amazon-ecs-deploy@v2
+      #   with:
+      #     cluster: your-cluster-name
+      #     service: your-service-name
+      #     image: ${{ steps.login-ecr.outputs.registry }}/todo-app:latest
+      #     wait-for-service-stability: true
