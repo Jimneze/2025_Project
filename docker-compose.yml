@@ -1,0 +1,14 @@
+name: kubalin
+
+services:
+  app:
+    # platform: linux/amd64
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: kubalin-docker
+    container_name: kubalin-container
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
