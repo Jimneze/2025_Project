@@ -29,10 +29,10 @@ jobs:
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
 
-      - name: Update ECS service
-        uses: aws-actions/amazon-ecs-deploy@v2
-        with:
-          cluster: todo-cluster-2025-project
-          service: todo-app-service-6k5t4dus
-          image: ${{ steps.login-ecr.outputs.registry }}/todo-app:latest
-          wait-for-service-stability: true
+      # - name: Update ECS service
+      #   uses: aws-actions/amazon-ecs-deploy@v2
+      #   with:
+      #     cluster: todo-cluster-2025-project
+      #     service: todo-app-service-6k5t4dus
+      #     image: ${{ steps.login-ecr.outputs.registry }}/todo-app:latest
+      #     wait-for-service-stability: true
