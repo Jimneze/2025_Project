@@ -1,8 +1,7 @@
 name: Deploy Django App to AWS Fargate
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   deploy:
