@@ -5,6 +5,7 @@ from todo.models import Todo
 from .serializers import TodoSerializer
 import sqlite3
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
@@ -12,6 +13,15 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+class TodoListGetView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        todos = Todo.objects.all().order_by("-created_at")
+        serializer = TodoSerializer(todos, many=True)
+        return Response(serializer.data)
+
 
 class TodoListCreateView(generics.ListCreateAPIView):
     serializer_class = TodoSerializer
@@ -32,26 +42,31 @@ class TodoRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         return Todo.objects.filter(user=self.request.user)
     
 
+@csrf_exempt
 def sql_injection_view(request):
     # Connect to the database
-    conn = sqlite3.connect('db.sqlite3')
-    cursor = conn.cursor()
+    
+    # conn = sqlite3.connect('db.sqlite3')
+    # cursor = conn.cursor()
 
     # Get the 'name' parameter from the request
-    name = request.GET.get('name', '')
+    # name = request.GET.get('name', '')
 
     # WARNING: The following line is vulnerable to SQL injection
-    query = f"SELECT * FROM todo_todo WHERE name = '{name}'"
-    cursor.execute(query)
+    # query = f"SELECT * FROM todo_todo WHERE name = '{name}'"
+    # cursor.execute(query)
+
+    # Use Django models instead of raw SQL
+    users = User.objects.all()
 
     # Fetch all results
-    rows = cursor.fetchall()
+    # rows = cursor.fetchall()
 
     # Close the connection
-    conn.close()
+    # conn.close()
 
     # Return the results as JSON
-    return JsonResponse({'results': rows})
+    return JsonResponse({'results': list(users.values())})
 
 # JWT Authentication Views
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

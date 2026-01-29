@@ -2,6 +2,9 @@ name: Deploy Django to EC2
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 env:
   AWS_REGION: "eu-north-1"

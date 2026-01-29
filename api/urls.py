@@ -5,6 +5,7 @@ from api.views import *
 
 urlpatterns = [
     # serving todo API endpoints through django models
+    path('todos/public/', TodoListGetView.as_view(), name='todo-list-get'),
     path('todos/', TodoListCreateView.as_view(), name='todo-list-create'),
     path('todos/<int:pk>/', TodoRetrieveUpdateDestroyView.as_view(), name='todo-retrieve-update-destroy'),
     

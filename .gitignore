@@ -19,3 +19,8 @@ media/*
 
 # remove my notes
 aws_deploy_setup.md
+
+core/settings.py
+
+# ignore notes
+TOKEN_AUTH_GUIDE.md
